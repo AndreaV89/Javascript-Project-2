@@ -12,6 +12,7 @@ const studentList = document.getElementsByClassName('student-item');
 // How much items per page
 const itemsPerPage = 10;
 
+
 /*******************/   
 /**   Functions   **/
 /*******************/
@@ -103,6 +104,8 @@ const appendPageLinks = (list) => {
    }
 }
 
+
+
 // call showPage function with the first page as argument when the page is loaded
 showPage(studentList, 1);
 
@@ -111,3 +114,4 @@ createSearch();
 
 // call appendPageLinks to create the pagination links
 appendPageLinks(studentList);
+
