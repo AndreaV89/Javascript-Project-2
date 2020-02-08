@@ -9,6 +9,8 @@ FSJS project 2 - List Filter and Pagination
 
 // List of students
 const studentList = document.getElementsByClassName('student-item');
+// select the main container
+const pageDiv = document.getElementsByClassName('page');
 // How much items per page
 const itemsPerPage = 10;
 
@@ -36,9 +38,50 @@ const showPage = (list, page) => {
    }
 }
 
+/* search function */
+
+function search(list) {
+   // Array for results
+   let resultsArray = [];
+   // Students Name
+   const studentNames = document.getElementsByTagName('h3');
+   // User input
+   const inputField = document.getElementsByTagName("input");
+   let input = inputField[0].value.trim().toLowerCase();
+   // reset pagination buttons
+   const paginationDiv = document.getElementsByClassName('pagination');
+   // reset pagination links
+   if(paginationDiv.length != 0) {
+      pageDiv[0].removeChild(paginationDiv[0]);
+   }
+   for(let i = 0; i < list.length; i++) {
+      // Hide all students
+      list[i].style.display = "none";
+      if (studentNames[i].innerText.includes(input)) {
+         // add students that matches the search in the results array
+         resultsArray.push(list[i]);
+      }
+   }
+   // select "no results" text
+   const noResults = document.getElementsByTagName('p');
+   if (resultsArray.length === 0) {
+      // if search matches no student show "no results" text
+      noResults[0].style.display = "block";
+   } else {
+      //else hide it
+      noResults[0].style.display = "none";
+      // call functions that create the page with the results array as parameters
+      showPage(resultsArray, 1);
+      appendPageLinks(resultsArray);
+   }
+ 
+}
+
+
+
 /* createSearch function, create the search field and search button */
 
-const createSearch = () => {
+const createElements = () => {
    // select the header div
    const headerDiv = document.getElementsByClassName("page-header");
    // create the search div
@@ -55,14 +98,24 @@ const createSearch = () => {
    // add placeholder to input field
    searchInput.setAttribute("placeholder", "Search for students...");
    // add text to button
-   searchBtn.textContent = "Search"; 
+   searchBtn.textContent = "Search";
+   // add event listeners to input field and button
+   searchInput.addEventListener('keyup', function () {
+      search(studentList);
+   });
+   searchBtn.addEventListener('click', function () {
+      search(studentList);
+   });
+   // create no results text
+   const noResults = document.createElement('P');
+   noResults.innerHTML = 'Sorry, no results found...';
+   pageDiv[0].appendChild(noResults);
+   noResults.style.display = 'none';
 }
 
 /* appendPageLinks function, create the links for the pagination */
 
 const appendPageLinks = (list) => {
-   // select the main container
-   const pageDiv = document.getElementsByClassName('page');
    // create the pagination div
    const div = document.createElement("DIV");
    // add the class "pagination" to the created div
@@ -99,7 +152,7 @@ const appendPageLinks = (list) => {
          // add the class "active" to clicked link
          e.target.classList.add("active");
          // call che showPage function using the textContent of the clicked link as argument for the page number
-         showPage(studentList, e.target.textContent);
+         showPage(list, e.target.textContent);
       })
    }
 }
@@ -110,8 +163,9 @@ const appendPageLinks = (list) => {
 showPage(studentList, 1);
 
 // call createSearch function when the page is loaded
-createSearch();
+createElements();
 
 // call appendPageLinks to create the pagination links
 appendPageLinks(studentList);
+
 
