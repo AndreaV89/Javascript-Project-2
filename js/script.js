@@ -81,7 +81,7 @@ function search(list) {
 
 /* createSearch function, create the search field and search button */
 
-const createElements = () => {
+const createElements = (list) => {
    // select the header div
    const headerDiv = document.getElementsByClassName("page-header");
    // create the search div
@@ -101,10 +101,10 @@ const createElements = () => {
    searchBtn.textContent = "Search";
    // add event listeners to input field and button
    searchInput.addEventListener('keyup', function () {
-      search(studentList);
+      search(list);
    });
    searchBtn.addEventListener('click', function () {
-      search(studentList);
+      search(list);
    });
    // create no results text
    const noResults = document.createElement('P');
@@ -163,7 +163,7 @@ const appendPageLinks = (list) => {
 showPage(studentList, 1);
 
 // call createSearch function when the page is loaded
-createElements();
+createElements(studentList);
 
 // call appendPageLinks to create the pagination links
 appendPageLinks(studentList);
